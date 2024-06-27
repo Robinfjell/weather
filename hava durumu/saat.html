@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Helvetica, sans-serif;
+            color: #7d6a6a;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        #clock {
+            background: transparent;
+            border-radius: 50%;
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 50px auto;
+        }
+
+        .clock-step {
+            position: absolute;
+            width: 30.8221px;
+            height: 63.3738px;
+            pointer-events: none;
+            display: none; /* Başlangıçta gizle */
+        }
+
+        .clock-step span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <video id="video-background" autoplay loop muted>
+        <source src="./images/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div id="clock">
+        <div class="clock-step" style="transform: rotate(0deg) translateY(-138.112px);"><span>1</span></div>
+        <div class="clock-step" style="transform: rotate(32.7273deg) translateY(-138.112px);"><span>2</span></div>
+        <div class="clock-step" style="transform: rotate(65.4545deg) translateY(-138.112px);"><span>3</span></div>
+        <div class="clock-step" style="transform: rotate(98.1818deg) translateY(-138.112px);"><span>4</span></div>
+        <div class="clock-step" style="transform: rotate(130.909deg) translateY(-138.112px);"><span>5</span></div>
+        <div class="clock-step" style="transform: rotate(163.636deg) translateY(-138.112px);"><span>6</span></div>
+        <div class="clock-step" style="transform: rotate(196.364deg) translateY(-138.112px);"><span>7</span></div>
+        <div class="clock-step" style="transform: rotate(229.091deg) translateY(-138.112px);"><span>8</span></div>
+        <div class="clock-step" style="transform: rotate(261.818deg) translateY(-138.112px);"><span>9</span></div>
+        <div class="clock-step" style="transform: rotate(294.545deg) translateY(-138.112px);"><span>10</span></div>
+        <div class="clock-step" style="transform: rotate(327.273deg) translateY(-138.112px);"><span>11</span></div>
+        <div class="clock-step" style="transform: rotate(360deg) translateY(-138.112px);"><span>12</span></div>
+    </div>
+
+    <script>
+        function showNumberAtSecond(sec) {
+            const steps = document.querySelectorAll('.clock-step');
+            steps.forEach((step, index) => {
+                if (index === sec % 12) {
+                    step.style.display = 'block';
+                } else {
+                    step.style.display = 'none';
+                }
+            });
+        }
+
+        function updateClock() {
+            var dateInfo = new Date();
+            var hr = dateInfo.getHours() > 12 ? dateInfo.getHours() - 12 : dateInfo.getHours(),
+                min = dateInfo.getMinutes(),
+                sec = dateInfo.getSeconds(),
+                milsec = dateInfo.getMilliseconds();
+
+            var hrAngle = hr * 30 + (min * 6) / 12,
+                minAngle = min * 6 + (sec * 6) / 60,
+                secAngle = sec * 6 + (milsec * 0.36) / 1000;
+
+            setAngle('hr-wrapper', hrAngle);
+            setAngle('min-wrapper', minAngle);
+            setAngle('sec-wrapper', secAngle);
+
+            showNumberAtSecond(sec);
+        }
+
+        function setAngle(wrapper, angle) {
+            document.querySelector("." + wrapper).style.transform = "rotate(" + angle + "deg)";
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
